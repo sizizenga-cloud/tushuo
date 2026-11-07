@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>圖說</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="圖說">
+<meta name="theme-color" content="#e8590c">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#fff8ee;--card:#fff;--tx:#2b2118;--ac:#e8590c;--bd:#f0d9bd;--chip:#fff0d9}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#1c1712;--card:#2a231b;--tx:#f6ece0;--ac:#ff8a3d;--bd:#4a3c2c;--chip:#3a2f23}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#1c1712;--card:#2a231b;--tx:#f6ece0;--ac:#ff8a3d;--bd:#4a3c2c;--chip:#3a2f23}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:18px/1.5 "PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif}
+main{max-width:560px;margin:0 auto;padding:16px}
+h1{font-size:24px;margin:4px 0 6px;text-align:center}
+#ind{text-align:center;font-weight:700;color:var(--ac);margin-bottom:10px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:14px}
+h2{font-size:18px;margin:0 0 10px}
+button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:14px 16px;background:var(--ac);color:#fff;cursor:pointer;width:100%}
+button.alt{background:var(--chip);color:var(--tx);border:1px solid var(--bd)}
+.row{display:flex;gap:8px;margin-top:8px}.row>*{flex:1}
+textarea{width:100%;font:inherit;font-size:20px;padding:10px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);resize:vertical}
+.chips{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;max-height:240px;overflow-y:auto}
+.chips button{background:var(--chip);color:var(--tx);border:1px solid var(--bd);text-align:left;font-weight:500;font-size:17px;padding:10px 12px}
+.sw{display:flex;gap:12px;margin:6px 0 12px}
+.sw i{width:44px;height:44px;border-radius:50%;border:4px solid transparent;cursor:pointer;display:block}
+.sw i.on{border-color:var(--ac)}
+#out{width:min(100%,24vh);margin:0 auto;display:block;border-radius:12px}
+#out.big{width:min(100%,42vh)}
+#msg{min-height:26px;text-align:center;font-size:16px;margin:8px 0 0}
+.mic.on{background:#d32f2f;color:#fff}
+.step{display:none}.step.on{display:block}
+.hint{font-size:15px;opacity:.75;margin:0 0 10px}
+</style></head><body><main>
+<h1>☀️ 圖說</h1>
+<div id="ind"></div>
+<div class="card" id="pv"><img id="out" alt="早安圖預覽"></div>
+
+<section class="step on" id="s1"><div class="card"><h2>① 選擇照片</h2>
+<input id="file" type="file" accept="image/*" hidden>
+<button id="pick" style="padding:56px 16px;font-size:26px">📷 點這裡選擇照片</button>
+<p id="msg1" style="text-align:center;margin:12px 0 0"></p>
+</div></section>
+
+<section class="step" id="s2"><div class="card"><h2>② 選擇文字（點一下套用）</h2>
+<div class="chips" id="chips"></div>
+<textarea id="txt" rows="3" placeholder="也可以自己輸入…"></textarea>
+<div class="row"><button class="alt mic" id="mic">🎤 語音輸入</button><button class="alt" id="clr">清除</button></div>
+<p id="msg2" style="text-align:center;margin:8px 0 0;font-size:16px"></p>
+<div class="row"><button class="alt" data-go="1">← 上一步</button><button data-go="3">下一步 →</button></div></div></section>
+
+<section class="step" id="s3"><div class="card"><h2>③ 調整並完成</h2>
+<div class="sw" id="sw"></div>
+<div class="row" style="margin-top:0"><button class="alt" id="small">A－ 縮小</button><button class="alt" id="big">A＋ 放大</button></div>
+<p class="hint" style="margin-top:10px">用手指在圖片上拖曳，就能移動文字位置。</p>
+<button id="copy" style="margin-bottom:8px">📋 複製圖片</button>
+<button class="alt" id="save">💾 儲存圖片</button>
+<p id="msg"></p>
+<div class="row"><button class="alt" data-go="2">← 上一步</button></div></div></section>
+</main>
+<div id="ov" style="display:none;position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.92);flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:16px;padding-top:calc(16px + env(safe-area-inset-top,0px));padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))"><p style="color:#fff;font-weight:700;text-align:center;margin:0;font-size:20px">長按下方圖片，選「加入照片」或「儲存影像」</p><img id="ovimg" alt="" style="max-width:100%;max-height:60vh;border-radius:12px"><button id="close" style="max-width:320px">完成</button></div>
+<script>
+const $=id=>document.getElementById(id);
+const sugg=["早安！願你今天平安健康，笑口常開","早安！身體健康最重要，記得多喝水喔","早安！天氣變涼了，記得多穿衣服保暖","早安！祝您萬事如意，心想事成","早安！吃得好睡得好，快樂每一天","早安！愛笑的人運氣都不會太差","早安！今天也要開開心心，平安喜樂","早安！一日之計在於晨，今天加油"];
+const cols=[["#ffeb3b","#d32f2f"],["#ffffff","#e53935"],["#ff1744","#ffffff"],["#ffffff","#1b5e20"]];
+const titles=["選擇照片","選擇文字","調整並完成"];
+let img=null,ci=0,scale=1,tx=540,ty=null,cy=0;
+const cv=document.createElement("canvas");cv.width=cv.height=1080;
+const ctx=cv.getContext("2d");
+function go(n){[1,2,3].forEach(i=>$("s"+i).classList.toggle("on",i===n));$("ind").textContent="步驟 "+n+"／3："+titles[n-1];$("out").classList.toggle("big",n===3);$("pv").style.display=n===3?"block":"none";if(n!==1)$("msg1").textContent="";window.scrollTo(0,0)}
+document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(+b.dataset.go));
+sugg.forEach(s=>{const b=document.createElement("button");b.textContent=s;b.onclick=()=>{$("txt").value=s;draw()};$("chips").appendChild(b)});
+cols.forEach((c,i)=>{const e=document.createElement("i");e.style.background=c[0];e.style.boxShadow="inset 0 0 0 4px "+c[1];e.onclick=()=>{ci=i;mark();draw()};$("sw").appendChild(e)});
+function mark(){[...$("sw").children].forEach((e,i)=>e.classList.toggle("on",i===ci))}
+function wrap(t,maxW){const out=[];t.split("\n").forEach(p=>{let l="";for(const ch of p){if(ctx.measureText(l+ch).width>maxW&&l){out.push(l);l=ch}else l+=ch}out.push(l)});return out}
+function draw(){
+ const W=1080;
+ if(img){const s=Math.max(W/img.width,W/img.height),w=img.width*s,h=img.height*s;ctx.drawImage(img,(W-w)/2,(W-h)/2,w,h)}
+ else{const g=ctx.createLinearGradient(0,0,0,W);g.addColorStop(0,"#ffd27d");g.addColorStop(1,"#ff8f6b");ctx.fillStyle=g;ctx.fillRect(0,0,W,W);ctx.fillStyle="#fff3b0";ctx.beginPath();ctx.arc(540,330,150,0,7);ctx.fill()}
+ const t=$("txt").value.trim();
+ if(t){
+  let size=Math.round(90*scale),lines;
+  for(;size>=20;size-=4){ctx.font="900 "+size+"px 'PingFang TC','Microsoft JhengHei','Noto Sans TC',sans-serif";lines=wrap(t,W-140);if(lines.length*size*1.3<=1000)break}
+  const lh=size*1.3,h=lines.length*lh;
+  let y=(ty===null?W-80-h/2:ty)-h/2;cy=y+h/2;
+  ctx.textAlign="center";ctx.textBaseline="middle";ctx.lineJoin="round";ctx.lineWidth=size/5;
+  lines.forEach((l,i)=>{const yy=y+lh*i+lh/2;ctx.strokeStyle=cols[ci][1];ctx.strokeText(l,tx,yy);ctx.fillStyle=cols[ci][0];ctx.fillText(l,tx,yy)});
+ }
+ $("out").src=cv.toDataURL("image/jpeg",.92);
+}
+$("pick").onclick=()=>$("file").click();
+$("file").onchange=e=>{const f=e.target.files[0];if(!f)return;const i=new Image();i.onload=()=>{img=i;draw();go(2)};i.src=URL.createObjectURL(f)};
+$("txt").oninput=draw;
+$("clr").onclick=()=>{$("txt").value="";draw()};
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null;
+$("mic").onclick=()=>{
+ if(!SR){$("msg2").textContent="此瀏覽器不支援語音輸入，請改用鍵盤上的麥克風按鈕。";return}
+ if(rec){rec.stop();return}
+ rec=new SR();rec.lang="zh-TW";rec.interimResults=true;
+ const base=$("txt").value;
+ $("mic").classList.add("on");$("mic").textContent="⏹ 聆聽中…點一下停止";
+ rec.onresult=e=>{let s="";for(const r of e.results)s+=r[0].transcript;$("txt").value=base+s;draw()};
+ rec.onend=rec.onerror=()=>{rec=null;$("mic").classList.remove("on");$("mic").textContent="🎤 語音輸入"};
+ try{rec.start()}catch(_){rec=null}
+};
+$("big").onclick=()=>{scale=Math.min(2.6,scale+.15);draw()};
+$("small").onclick=()=>{scale=Math.max(.5,scale-.15);draw()};
+const o=$("out");let d=null,raf=0;
+o.style.touchAction="none";
+o.addEventListener("pointerdown",e=>{d={x:e.clientX,y:e.clientY,tx:tx,ty:cy};o.setPointerCapture(e.pointerId)});
+o.addEventListener("pointermove",e=>{if(!d)return;const k=1080/o.getBoundingClientRect().width;tx=d.tx+(e.clientX-d.x)*k;ty=d.ty+(e.clientY-d.y)*k;if(!raf)raf=requestAnimationFrame(()=>{raf=0;draw()})});
+["pointerup","pointercancel"].forEach(n=>o.addEventListener(n,()=>{d=null}));
+$("save").onclick=()=>{cv.toBlob(b=>{const f=new File([b],"圖說.jpg",{type:"image/jpeg"});const ov=()=>{$("ovimg").src=URL.createObjectURL(b);$("ov").style.display="flex"};if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f]}).catch(e=>{if(e.name!=="AbortError")ov()})}else ov()},"image/jpeg",.92)};
+$("close").onclick=()=>{$("ov").style.display="none"};
+window._sv={};window._sv.onclick=()=>{
+ cv.toBlob(b=>{
+  const f=new File([b],"圖說.jpg",{type:"image/jpeg"});
+  const fb=()=>{try{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="圖說.jpg";document.body.appendChild(a);a.click();a.remove()}catch(_){}$("msg").textContent="若沒有儲存，請長按上方圖片，選「儲存到相簿」。"};
+  if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f]}).catch(e=>{if(e.name!=="AbortError")fb()})}else fb();
+ },"image/jpeg",.92)};
+$("copy").onclick=async()=>{
+ try{
+  await navigator.clipboard.write([new ClipboardItem({"image/png":new Promise(r=>cv.toBlob(r,"image/png"))})]);
+  img=null;ci=0;scale=1;tx=540;ty=null;$("txt").value="";$("file").value="";mark();draw();go(1);$("msg").textContent="";$("msg1").textContent="✅ 圖片已複製！請到 LINE 貼上，再回來製作下一張。";
+ }catch(_){$("msg").textContent="此瀏覽器無法複製圖片，請長按圖片儲存到相簿。"}
+};
+mark();draw();go(1);
+</script></body></html>
