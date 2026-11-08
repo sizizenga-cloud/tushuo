@@ -71,7 +71,7 @@ textarea{width:100%;font:inherit;font-size:20px;padding:10px;border-radius:12px;
 <div id="ov" style="display:none;position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.92);flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:16px;padding-top:calc(16px + env(safe-area-inset-top,0px));padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))"><p style="color:#fff;font-weight:700;text-align:center;margin:0;font-size:20px">長按下方圖片，選「加入照片」或「儲存影像」</p><img id="ovimg" alt="" style="max-width:100%;max-height:60vh;border-radius:12px"><button id="close" style="max-width:320px">完成</button></div>
 <script>
 const $=id=>document.getElementById(id);
-const sugg=["早安！願你今天平安健康，笑口常開","早安！身體健康最重要，記得多喝水喔","早安！天氣變涼了，記得多穿衣服保暖","早安！祝您萬事如意，心想事成","早安！吃得好睡得好，快樂每一天","早安！愛笑的人運氣都不會太差","早安！今天也要開開心心，平安喜樂","早安！一日之計在於晨，今天加油"];
+const sugg=["今天也要元氣滿滿喔","好久不見，最近好嗎？","想你了","辛苦了，早點休息","加油！你可以的","今天天氣真好"];
 const cols=[["#ffeb3b","#d32f2f"],["#ffffff","#e53935"],["#ff1744","#ffffff"],["#ffffff","#1b5e20"]];
 const titles=["選擇照片","輸入文字","調整並完成"];
 const mkT=()=>({t:"",x:540,y:null,s:1,c:0});
@@ -100,7 +100,7 @@ function renderList(){
 }
 function renderSel(){
  const r=$("tsel");r.innerHTML="";
- texts.forEach((t,i)=>{const b=document.createElement("button");b.className="alt sel"+(i===sel?" on":"");b.textContent="文字"+(i+1)+(t.t.trim()?"："+t.t.trim().replace(/^早安！?/,"").slice(0,3):"");b.onclick=()=>{sel=i;renderSel();mark()};r.appendChild(b)});
+ texts.forEach((t,i)=>{const b=document.createElement("button");b.className="alt sel"+(i===sel?" on":"");b.textContent="文字"+(i+1)+(t.t.trim()?"："+t.t.trim().slice(0,3):"");b.onclick=()=>{sel=i;renderSel();mark()};r.appendChild(b)});
  mark();
 }
 $("add").onclick=()=>{if(texts.length>=8){$("msg2").textContent="最多可以新增 8 段文字。";return}texts.push(mkT());sel=texts.length-1;renderList();tas[sel].focus()};
